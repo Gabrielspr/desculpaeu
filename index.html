@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Para Ethel 🤍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: url('bg.jpg') center / cover fixed no-repeat, linear-gradient(180deg, #0b1d2a, #102f44);
+      color: #f5f7fa;
+      overflow-x: hidden;
+    }
+
+    button {
+      background: #ffffff;
+      color: #102f44;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .main {
+      background: rgba(11, 29, 42, 0.55);
+      backdrop-filter: blur(2px);
+
+      min-height: 100vh;
+      padding: 80px 20px 120px;
+      position: relative;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+    }
+
+    .letter {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      white-space: pre-line;
+      margin-bottom: 40px;
+    }
+
+    .counter {
+      font-size: 1.4rem;
+      margin-bottom: 30px;
+    }
+
+    .subtitle-box {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.08);
+      padding: 20px;
+      border-radius: 16px;
+      min-height: 70px;
+    }
+
+    .photos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 60px;
+    }
+
+    .photos img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .seals {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .seal {
+      pointer-events: auto;
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      background: url('seal.png') no-repeat center / contain;
+      animation: float 18s linear infinite;
+      transition: transform 0.4s ease;
+    }
+
+    .float-item {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      animation: float 26s linear infinite;
+      opacity: 0.8;
+    }
+
+    .seal:hover {
+      transform: scale(1.4) rotate(10deg);
+    }
+
+    @keyframes float {
+      from { transform: translateY(110vh) rotate(0deg); }
+      to   { transform: translateY(-10vh) rotate(360deg); }
+    }
+
+    audio { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="seals" id="seals"></div>
+
+  <div class="main">
+    <div class="container">
+      <h2>Eu te amo</h2>
+      <button onclick="playMusic()">▶ Play music</button>
+      <br/>
+      <button onclick="playAudio()">🎧 Escuta em japonês o texto</button>
+
+      <div class="letter">
+Meu amor,
+
+eu fico um pouco tímido escrevendo isso,
+porque sempre que penso em você,
+meu coração corre mais rápido do que minhas palavras.
+
+mesmo assim, eu preciso tentar.
+
+obrigado por tudo.
+obrigado por ter ficado.
+obrigado por ter me dado uma chance.
+
+sou completamente vidrado em você,
+em como você tenta tanto por mim.
+
+é por você que eu faria tudo.
+
+amo seus olhos,
+meu sorriso por você,
+minha risada quando você me faz esquecer de tudo,
+e meu cabelo curto bagunçado pelo vento.
+
+eu amo quem eu sou quando estou com você.
+
+sempre seu.
+      </div>
+
+      <div class="counter" id="counter"></div>
+
+      <div class="subtitle-box" id="subtitle"></div>
+
+      <div class="photos">
+        <img src="foto1.jpg" />
+        <img src="foto2.jpg" />
+        <img src="foto3.jpg" />
+      </div>
+    </div>
+  </div>
+
+  <audio id="jpAudio" src="audio-japones.mp3"></audio>
+  <audio id="bgMusic" src="musica-fundo.mp3" loop></audio>
+
+  <script>
+    const bgMusic = document.getElementById('bgMusic');
+    const jpAudio = document.getElementById('jpAudio');
+    const subtitle = document.getElementById('subtitle');
+
+    const subtitles = [
+      { time: 0, text: 'Oi, Ethel.' },
+      { time: 3, text: 'Eu fiz isso porque te amo.' },
+      { time: 7, text: 'Obrigado por ter ficado comigo.' },
+      { time: 12, text: 'Obrigado por me dar uma chance.' }
+    ];
+
+    window.onload = () => {
+      startCounter();
+      generateSeals();
+    };
+
+    function playMusic() {
+      jpAudio.pause();
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+    }
+
+    function playAudio() {
+      bgMusic.pause();
+      jpAudio.currentTime = 0;
+      jpAudio.play();
+    }
+
+    jpAudio.addEventListener('timeupdate', () => {
+      const t = jpAudio.currentTime;
+      for (let i = subtitles.length - 1; i >= 0; i--) {
+        if (t >= subtitles[i].time) {
+          subtitle.innerText = subtitles[i].text;
+          break;
+        }
+      }
+    });
+
+    function startCounter() {
+      const start = new Date('2025-06-20T00:00:00');
+      setInterval(() => {
+        const now = new Date();
+        const diff = now - start;
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor(diff / 3600000) % 24;
+        const m = Math.floor(diff / 60000) % 60;
+        const s = Math.floor(diff / 1000) % 60;
+        document.getElementById('counter').innerText = `Estamos juntos há ${d} dias, ${h}h ${m}m ${s}s`;
+      }, 1000);
+    }
+
+    function generateSeals() {
+      const c = document.getElementById('seals');
+
+      // focas
+      for (let i = 0; i < 18; i++) {
+        const s = document.createElement('div');
+        s.className = 'seal';
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.animationDuration = 12 + Math.random() * 10 + 's';
+        c.appendChild(s);
+      }
+
+      // outros itens fofos flutuando
+      const items = ['heart.png', 'star.png', 'sparkle.png'];
+
+      for (let i = 0; i < 15; i++) {
+        const it = document.createElement('img');
+        it.src = items[i % items.length];
+        it.className = 'float-item';
+        it.style.left = Math.random() * 100 + 'vw';
+        it.style.width = 24 + Math.random() * 24 + 'px';
+        it.style.animationDuration = 18 + Math.random() * 14 + 's';
+        c.appendChild(it);
+      }
+    }
+  </script>
+</body>
+</html>
